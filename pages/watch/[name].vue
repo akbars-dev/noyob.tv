@@ -41,6 +41,15 @@ watchEffect(async () => {
     const { id, type } = getInfo(route.params.name);
     await fetchMedia(id, type);
 });
+
+
+useSeoMeta({
+  title: () => media.value.title,
+  ogTitle: () =>  media.value.title,
+  description: () =>  media.value.description,
+  ogDescription: () =>  media.value.description,
+  ogImage: () =>  media.value.photo_url,
+})
 </script>
 
 <template>

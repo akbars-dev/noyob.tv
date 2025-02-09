@@ -29,6 +29,15 @@ const changePage = (newPage) => {
         currentPage.value = newPage;
     }
 };
+
+
+useSeoMeta({
+  title: 'Noyob.tv - Online kinoteator',
+  ogTitle: 'Noyob.tv - Online kinoteator',
+  description: 'Barcha kino, multfilm va seriallar ozbek tilida yuqori sifatda bepul tomosha qiling',
+  ogDescription: "Barcha kino, multfilm va seriallar o'zbek tilida yuqori sifatda bepul tomosha qiling",
+  ogImage: '/favicon.png',
+})
 </script>
 
 <template>
