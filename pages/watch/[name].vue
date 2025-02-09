@@ -114,16 +114,6 @@ useSeoMeta({
 .wrapper {
     width: 1200px;
     margin: auto;
-
-    .error-box {
-        background: #ff4c4c;
-        color: white;
-        padding: 15px;
-        text-align: center;
-        border-radius: 8px;
-        font-weight: bold;
-    }
-
     .download-movie {
         width: 97%;
         padding: 20px;
@@ -156,22 +146,17 @@ useSeoMeta({
                 width: 80%;
             }
 
-            .download-button {
-                display: inline-block;
+            button {
                 padding: 10px 20px;
                 background: #6553b4;
                 width: 18%;
                 color: #fff;
                 font-size: 16px;
                 font-family: 'Manrope';
-                text-align: center;
+                border: none;
                 border-radius: 5px;
-                text-decoration: none;
+                cursor: pointer;
                 transition: 0.2s;
-
-                &:hover {
-                    background: #4a3b9b;
-                }
             }
         }
     }
@@ -244,7 +229,7 @@ useSeoMeta({
                 }
             }
 
-            .info-paragraph {
+            .info-paragraf {
                 margin-top: 30px;
                 color: #574D46;
                 font-family: 'Manrope';
@@ -265,5 +250,69 @@ useSeoMeta({
         width: 90%;
         margin: auto;
     }
+}
+
+@media (max-width: 843px) {
+    .movie-box {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 5px  !important;
+        .film-info {
+
+            .right-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 70%;
+
+                .type {
+                    width: 90% !important;
+                    padding: 0px 20px;
+                }
+
+                .genre {
+                    width: 90%;
+                }
+            }
+        }
+    }
+
+    .download-movie {
+        padding: 20px 5px  !important;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-bottom: 100px;
+
+        .action-part {
+            width: 90% !important;
+            align-items: center;
+            flex-direction: column;
+            select {
+                width: 90% !important;
+            }
+            button {
+                width: 90% !important;
+            }
+        }
+    }
+
+}
+
+@media (max-width: 546px) {
+    .movie-box {
+        flex-direction: column;
+        align-items: center;
+        h1 {
+            font-size: 26px !important;
+        }
+        p {
+            font-size: 14px !important;
+        }
+        
+    }
+
 }
 </style>
