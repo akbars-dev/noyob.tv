@@ -31,7 +31,9 @@ watch(searchQuery, async () => {
         <div class="container">
             <nav class="navbar">
                 <div class="links">
-                    <NuxtLink to="/" class="serif logo">NOYOB.TV</NuxtLink>
+                    <NuxtLink to="/" class="serif logo">
+                        <img src="../assets/images/logo-dark.png" alt="">
+                    </NuxtLink>
 
 
                     <ul :class="{ 'link_list': true, 'open': isNavOpen }">

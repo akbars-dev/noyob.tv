@@ -7,13 +7,16 @@ const route = useRoute();
 const media = ref(null);
 const parts = ref([]);
 const selectedPart = ref('');
+const error = ref(null);
 
 const getInfo = (string) => {
-    const array = string.split('-');
-    let type = array[1]
+    if (!string) return { id: null, type: null };
 
-    if (type == 'anime') {
-        type = 'multik'
+    const array = string.split('-');
+    let type = array[1];
+
+    if (type === 'anime') {
+        type = 'multik';
     }
 
     return { id: array[0], type: type };
@@ -21,41 +24,54 @@ const getInfo = (string) => {
 
 const fetchMedia = async (id, type) => {
     try {
-        const response = await fetch(`https://back.noyob.tv/api/v1/part?type=${type}&id=${id}`);
-        const data = await response.json();
+        const { data, error: fetchError } = await useFetch(`https://back.noyob.tv/api/v1/part`, {
+            query: { type, id },
+        });
 
-        if (data.info) {
-            media.value = data.info;
-            parts.value = data.parts || [];
+        if (fetchError.value) {
+            throw new Error(fetchError.value);
+        }
+
+        if (data.value?.info) {
+            media.value = data.value.info;
+            parts.value = data.value.parts || [];
 
             if (parts.value.length > 0) {
                 selectedPart.value = parts.value[0].download_url;
             }
         }
-    } catch (error) {
-        console.error("Ошибка при загрузке данных:", error);
+    } catch (err) {
+        console.error("Ошибка при загрузке данных:", err);
+        error.value = err.message;
     }
 };
 
+// Fetch data whenever route changes
 watchEffect(async () => {
     const { id, type } = getInfo(route.params.name);
-    await fetchMedia(id, type);
+    if (id && type) {
+        await fetchMedia(id, type);
+    }
 });
 
-
+// Handle SEO metadata safely
 useSeoMeta({
-  title: () => media.value.title,
-  ogTitle: () =>  media.value.title,
-  description: () =>  media.value.description,
-  ogDescription: () =>  media.value.description,
-  ogImage: () =>  media.value.photo_url,
-})
+    title: () => media.value?.title || 'Noyob TV - Barcha kinolar',
+    ogTitle: () => media.value?.title || 'Noyob TV - Barcha kinolar',
+    description: () => media.value?.description || 'Eng yaxshi filmlar va seriallar.',
+    ogDescription: () => media.value?.description || 'Eng yaxshi filmlar va seriallar.',
+    ogImage: () => media.value?.photo_url || '/default-image.jpg',
+});
 </script>
 
 <template>
     <div class="wrapper">
+        <div v-if="error" class="error-box">
+            <p>Xatolik yuz berdi: {{ error }}</p>
+        </div>
+
         <div class="movie-box" v-if="media">
-            <img :src="media.photo_url" class="poster-image" alt="images">
+            <img :src="media.photo_url" class="poster-image" alt="poster">
             <div class="text-info">
                 <div class="film-info">
                     <div class="right-info">
@@ -72,7 +88,7 @@ useSeoMeta({
                     </div>
                 </div>
                 <h1 class="info-headline">{{ media.title }}</h1>
-                <p class="info-paragraf">
+                <p class="info-paragraph">
                     {{ media.description }}
                 </p>
             </div>
@@ -80,31 +96,34 @@ useSeoMeta({
 
         <div class="download-movie" v-if="parts.length">
             <h1>Yuklab olish: </h1>
-
             <div class="action-part">
                 <select v-model="selectedPart">
                     <option v-for="part in parts" :key="part.id" :value="part.download_url">
                         {{ part.part }} {{ media.type === 'serial' ? 'qism' : '' }} - yuklab olish
                     </option>
                 </select>
-                <button :disabled="!selectedPart">
-
-                    <NuxtLink target="_blank" :to="selectedPart || '#'" style="color: white;">
-                        Yuklab olish
-                    </NuxtLink>
-                </button>
-
+                <NuxtLink v-if="selectedPart" :to="selectedPart" target="_blank" class="download-button">
+                    Yuklab olish
+                </NuxtLink>
             </div>
         </div>
     </div>
 </template>
 
-
-
 <style lang="scss" scoped>
 .wrapper {
     width: 1200px;
     margin: auto;
+
+    .error-box {
+        background: #ff4c4c;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
     .download-movie {
         width: 97%;
         padding: 20px;
@@ -137,17 +156,22 @@ useSeoMeta({
                 width: 80%;
             }
 
-            button {
+            .download-button {
+                display: inline-block;
                 padding: 10px 20px;
                 background: #6553b4;
                 width: 18%;
                 color: #fff;
                 font-size: 16px;
                 font-family: 'Manrope';
-                border: none;
+                text-align: center;
                 border-radius: 5px;
-                cursor: pointer;
+                text-decoration: none;
                 transition: 0.2s;
+
+                &:hover {
+                    background: #4a3b9b;
+                }
             }
         }
     }
@@ -220,7 +244,7 @@ useSeoMeta({
                 }
             }
 
-            .info-paragraf {
+            .info-paragraph {
                 margin-top: 30px;
                 color: #574D46;
                 font-family: 'Manrope';
@@ -241,69 +265,5 @@ useSeoMeta({
         width: 90%;
         margin: auto;
     }
-}
-
-@media (max-width: 843px) {
-    .movie-box {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px 5px  !important;
-        .film-info {
-
-            .right-info {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                width: 70%;
-
-                .type {
-                    width: 90% !important;
-                    padding: 0px 20px;
-                }
-
-                .genre {
-                    width: 90%;
-                }
-            }
-        }
-    }
-
-    .download-movie {
-        padding: 20px 5px  !important;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        margin-bottom: 100px;
-
-        .action-part {
-            width: 90% !important;
-            align-items: center;
-            flex-direction: column;
-            select {
-                width: 90% !important;
-            }
-            button {
-                width: 90% !important;
-            }
-        }
-    }
-
-}
-
-@media (max-width: 546px) {
-    .movie-box {
-        flex-direction: column;
-        align-items: center;
-        h1 {
-            font-size: 26px !important;
-        }
-        p {
-            font-size: 14px !important;
-        }
-        
-    }
-
 }
 </style>
