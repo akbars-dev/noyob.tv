@@ -102,9 +102,12 @@ useSeoMeta({
                         {{ part.part }} {{ media.type === 'serial' ? 'qism' : '' }} - yuklab olish
                     </option>
                 </select>
-                <NuxtLink v-if="selectedPart" :to="selectedPart" target="_blank" class="download-button">
-                    Yuklab olish
-                </NuxtLink>
+                <button>
+                    <NuxtLink style="color: white;" v-if="selectedPart" :to="selectedPart" target="_blank" class="download-button">
+                        Yuklab olish
+                    </NuxtLink>
+                </button>
+
             </div>
         </div>
     </div>
@@ -114,6 +117,7 @@ useSeoMeta({
 .wrapper {
     width: 1200px;
     margin: auto;
+
     .download-movie {
         width: 97%;
         padding: 20px;
@@ -215,7 +219,6 @@ useSeoMeta({
                         font-family: 'Manrope';
                     }
                 }
-
             }
 
             .info-headline {
@@ -229,7 +232,7 @@ useSeoMeta({
                 }
             }
 
-            .info-paragraf {
+            .info-paragraph {
                 margin-top: 30px;
                 color: #574D46;
                 font-family: 'Manrope';
@@ -257,9 +260,9 @@ useSeoMeta({
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 5px  !important;
-        .film-info {
+        padding: 20px 5px !important;
 
+        .film-info {
             .right-info {
                 display: flex;
                 flex-direction: column;
@@ -280,7 +283,7 @@ useSeoMeta({
     }
 
     .download-movie {
-        padding: 20px 5px  !important;
+        padding: 20px 5px !important;
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -290,29 +293,31 @@ useSeoMeta({
             width: 90% !important;
             align-items: center;
             flex-direction: column;
+
             select {
                 width: 90% !important;
             }
+
             button {
                 width: 90% !important;
             }
         }
     }
-
 }
 
 @media (max-width: 546px) {
     .movie-box {
         flex-direction: column;
         align-items: center;
+
         h1 {
             font-size: 26px !important;
         }
+
         p {
             font-size: 14px !important;
         }
-        
-    }
 
+    }
 }
 </style>
