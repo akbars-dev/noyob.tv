@@ -93,6 +93,13 @@ useSeoMeta({
   ogImage: '/favicon.png',
 })
 
+useHead({
+  script: [
+    { src: 'https://telegram.org/js/telegram-web-app.js', defer: true }
+  ]
+})
+
+
 </script>
 
 <template>

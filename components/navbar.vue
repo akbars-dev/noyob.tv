@@ -108,6 +108,7 @@ watch(searchQuery, async () => {
                 display: flex;
                 align-items: center;
                 gap: 20px;
+                z-index: 10000;
 
                 li {
                     .list_link {
