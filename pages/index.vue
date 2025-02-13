@@ -21,7 +21,7 @@ const cartoons = ref([])
 watchEffect(() => {
     if (slidersResponse.data.value) {
         sliders.value = slidersResponse.data.value.movies
-    } 
+    }
 
     if (moviesResponse.data.value) {
         movies.value = moviesResponse.data.value.movies
@@ -33,7 +33,12 @@ watchEffect(() => {
 
     if (cartoonsResponse.data.value) {
         cartoons.value = cartoonsResponse.data.value.cartoons
-    }    
+    }
+
+    // Check if Telegram API is available before using it
+    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
+        window.Telegram.WebApp.expand();
+    }
 });
 
 const swiperConfig = {
@@ -86,18 +91,13 @@ const swiperConfig = {
 }
 
 useSeoMeta({
-  title: 'Noyob.tv - Online kinoteator',
-  ogTitle: 'Noyob.tv - Online kinoteator',
-  description: 'Barcha kino, multfilm va seriallar ozbek tilida yuqori sifatda bepul tomosha qiling',
-  ogDescription: "Barcha kino, multfilm va seriallar o'zbek tilida yuqori sifatda bepul tomosha qiling",
-  ogImage: '/favicon.png',
+    title: 'Noyob.tv - Online kinoteator',
+    ogTitle: 'Noyob.tv - Online kinoteator',
+    description: 'Barcha kino, multfilm va seriallar ozbek tilida yuqori sifatda bepul tomosha qiling',
+    ogDescription: "Barcha kino, multfilm va seriallar o'zbek tilida yuqori sifatda bepul tomosha qiling",
+    ogImage: '/favicon.png',
 })
 
-useHead({
-  script: [
-    { src: 'https://telegram.org/js/telegram-web-app.js', defer: true }
-  ]
-})
 
 
 </script>
@@ -108,7 +108,8 @@ useHead({
             <swiper :centered-slides="swiperConfig.centeredSlides" :breakpoints="swiperConfig.breakpoints"
                 :slidesPerView="1" :modules="swiperConfig.modules" class="mySwiper">
                 <swiper-slide v-for="slider in sliders">
-                    <NuxtLink :to="`/watch/${slider.id}-${slider.type}-${slider.title.replace(/\//g, '').trim().replace(/\s+/g, '-')}`">
+                    <NuxtLink
+                        :to="`/watch/${slider.id}-${slider.type}-${slider.title.replace(/\//g, '').trim().replace(/\s+/g, '-')}`">
                         <div class="slider-box">
                             <img :src="slider.photo_url" class="poster-image" alt="images">
                             <div class="text-info">
@@ -130,7 +131,8 @@ useHead({
                                     </div>
                                 </div>
                                 <h1 class="info-headline">{{ slider.title }}</h1>
-                                <p class="info-paragraf">{{ slider.description.replace("\n", " ").slice(0, 200) }}...</p>
+                                <p class="info-paragraf">{{ slider.description.replace("\n", " ").slice(0, 200) }}...
+                                </p>
                             </div>
                         </div>
                     </NuxtLink>
@@ -263,31 +265,31 @@ useHead({
 
 
 @media (max-width: 1200px) {
-.swiper {
-    width: 95%;
-}
+    .swiper {
+        width: 95%;
+    }
 }
 
 @media (max-width: 843px) {
     .swiper {
         .slider-box {
-         .film-info {
-            .right-info {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 70%;
+            .film-info {
+                .right-info {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 70%;
 
-                .type {
-                    width: 90% !important;
-                    padding: 0px 20px;
-                }
+                    .type {
+                        width: 90% !important;
+                        padding: 0px 20px;
+                    }
 
-                .genre {
-                    width: 90%;
+                    .genre {
+                        width: 90%;
+                    }
                 }
             }
-         }
         }
     }
 }

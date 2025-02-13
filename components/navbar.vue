@@ -5,6 +5,12 @@ const searchQuery = ref("");
 const searchResults = ref([]);
 const isNavOpen = ref(false);
 
+
+const clickToSearch = () => {
+    searchQuery.value = ""
+    searchResults.value = []
+}
+
 const toggleNav = () => {
     isNavOpen.value = !isNavOpen.value;
 };
@@ -61,7 +67,7 @@ watch(searchQuery, async () => {
                     <ul v-if="searchResults.length > 0" class="search-results">
                         <NuxtLink v-for="result in searchResults" :key="result._id"
                             :to="`/watch/${result.id}-${result.type}-${result.title.replace(/\//g, '').trim().replace(/\s+/g, '-')}`">
-                            <li class="search-item">
+                            <li @click="clickToSearch" class="search-item">
                                 <img :src="result.photo_url" alt="result">
                                 <!-- <span>{{ result.title }}</span> -->
                                 <span> {{ result.title.length > 20 ? result.title.slice(0, 20) + '...' : result.title

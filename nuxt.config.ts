@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   css: ["@/assets/styles/main.scss"],
   app: {
     head: {
+      script: [
+        { src: 'https://telegram.org/js/telegram-web-app.js', defer: true }
+      ],
       link: [
         { rel: "icon", type: "image/x-icon", href: "/favicon.png" }
       ]
